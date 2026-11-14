@@ -37,7 +37,6 @@ Built for the NASA Space Apps Challenge 2026, challenge *Interplanetary Survival
 - [Running it yourself](#running-it-yourself)
 - [Limitations](#limitations)
 - [Data and attribution](#data-and-attribution)
-- [AI assistance](#ai-assistance)
 - [License](#license)
 
 ---
@@ -75,30 +74,25 @@ It uses three data layers:
 
 ### Pipeline
 
-```text
- AI4Mars rover frames                      MOLA/HRSC blended DEM (200 m/px)
-        │                                              │
-        ▼                                              ▼
- prepare(): label mask + rover/range        crop to Gale Crater (137.4°E, 4.5°S, ±0.35°)
- masks → ignore index 255                                │
-        │                                              ▼
-        ▼                                     slope raster (degrees)
- DeepLabV3+ / ResNet-50                                  │
- (soil · bedrock · sand · big rock)                      │
-        │                                              │
-        ▼                                              │
- per-station hazard = share of frame                     │
- classified sand or big rock (12 stations)              │
-        │                                              │
-        ▼                                              ▼
- Gaussian interpolation (σ ≈ 15 cells) ──►  cost = 1 + 4·(min(θ,15°)/15°)² + 6·hazard
-                                            cost = ∞ where θ > 15°
-                                                       │
-                                                       ▼
-                                          A* (8-connected, octile heuristic)
-                                                       │
-                                                       ▼
-                                   site.json  ──►  index.html (Leaflet traverse map)
+```mermaid
+flowchart TD
+    subgraph Imagery["Optical + classification"]
+        A["AI4Mars rover frames"] --> B["prepare()<br/>label mask + rover/range masks → ignore index 255"]
+        B --> C["DeepLabV3+ / ResNet-50<br/>soil · bedrock · sand · big rock"]
+        C --> D["Per-station hazard<br/>share of frame classified sand or big rock<br/>(12 stations)"]
+        D --> E["Gaussian interpolation<br/>σ ≈ 15 cells ≈ 3 km"]
+    end
+
+    subgraph Topo["Topographic"]
+        F["MOLA/HRSC blended DEM<br/>200 m/px"] --> G["Crop to Gale Crater<br/>137.4°E, 4.5°S, ±0.35°"]
+        G --> H["Slope raster θ (degrees)"]
+    end
+
+    E --> I["Cost surface<br/>1 + 4·(min(θ,15°)/15°)² + 6·hazard<br/>∞ where θ > 15°"]
+    H --> I
+    I --> J["A* search<br/>8-connected, octile heuristic"]
+    J --> K["site.json"]
+    K --> L["index.html<br/>Leaflet traverse map"]
 ```
 
 ---
@@ -396,12 +390,6 @@ The Gradio cell starts the same interface as the [Hugging Face Space](https://hu
 | **USGS-NASA Planetary Geologic Mapping Program** | Regional geologic context for site selection | [usgs.gov/.../planetary-geologic-mapping](https://www.usgs.gov/centers/astrogeology-science-center/science/planetary-geologic-mapping) |
 
 Software: PyTorch, `segmentation-models-pytorch`, Hugging Face `datasets`, Gradio, rasterio, NumPy, Matplotlib, Leaflet.
-
----
-
-## AI assistance
-
-An AI assistant was used for code scaffolding, debugging and documentation drafting. All model training, evaluation and result verification were performed and checked by the team. All reported metrics come from our own evaluation runs on the held-out AI4Mars expert test set.
 
 ---
 
