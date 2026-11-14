@@ -1,4 +1,8 @@
-# Marswalk — Terrain-Safety Traverse Planning for Mars Surface Crews
+<p align="center">
+  <img src="assets/Mars%20Terrain%20Navigation%20Overlay.png" alt="Marswalk concept illustration: a planned route detouring around sand fields, compared with the dashed direct line" width="100%">
+</p>
+
+# <img src="assets/Orange%20Route%20Targeting%20Icon.png" alt="Marswalk logo" width="44" align="top"> Marswalk — Terrain-Safety Traverse Planning for Mars Surface Crews
 
 A terrain-safety traverse planner that labels every pixel of Mars rover imagery as soil, bedrock, sand or big rock, then plans a crew route that avoids the ground that ended Spirit's mission.
 
