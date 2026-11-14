@@ -220,7 +220,7 @@ function ring(pct,color){
     transform="rotate(-90 30 30)" style="filter:drop-shadow(0 0 5px ${color})"/></svg>`;
 }
 
-fetch("site.json").then(r=>r.json()).then(S=>{
+fetch("site.json?v=2", {cache:"no-store"}).then(r=>r.json()).then(S=>{
   const R=S.route.stats, D=S.direct.stats, M=S.model;
   const red=(1-R.mean_hazard/D.mean_hazard)*100;
   const extraPct=(R.distance_m/D.distance_m-1)*100;
