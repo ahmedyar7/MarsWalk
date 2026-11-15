@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARSWALK — 3D Traverse Viewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@200;300;400&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <!-- Loading / error overlay. Stays up until every asset has decoded. -->
+    <div id="overlay">
+      <div class="overlay-box">
+        <div class="lab" id="overlayLabel">Loading terrain</div>
+        <div class="bar"><i></i></div>
+        <div id="overlayMsg"></div>
+      </div>
+    </div>
+
+    <!-- top-left: wordmark + site -->
+    <header class="hud tl">
+      <div class="wordmark">MARS<em>WALK</em></div>
+      <div class="lab" id="siteName">—</div>
+      <div class="sub" id="siteObjective"></div>
+    </header>
+
+    <!-- top-right: route stats -->
+    <section class="hud tr panel" id="stats">
+      <div class="stat">
+        <div class="lab">Route distance</div>
+        <div class="val" id="statDist">—</div>
+        <div class="delta" id="statDistDelta"></div>
+      </div>
+      <div class="stat">
+        <div class="lab">Hazard exposure</div>
+        <div class="val" id="statHaz">—</div>
+        <div class="delta" id="statHazDelta"></div>
+      </div>
+    </section>
+
+    <!-- station detail, opened by clicking a marker -->
+    <aside class="hud panel" id="station" hidden>
+      <div class="st-head">
+        <div class="st-id" id="stId">ST-00</div>
+        <button class="x" id="stClose" aria-label="Close station panel">×</button>
+      </div>
+      <div class="lab" id="stMeta"></div>
+      <div class="st-imgs">
+        <figure><img id="stRaw" alt="Raw rover frame" /><figcaption class="lab">Raw</figcaption></figure>
+        <figure><img id="stSeg" alt="Classified frame" /><figcaption class="lab">Classified</figcaption></figure>
+      </div>
+      <div class="cov" id="stCov"></div>
+      <div class="verdict" id="stVerdict"></div>
+    </aside>
+
+    <!-- bottom-left: controls -->
+    <section class="hud bl panel" id="controls">
+      <button class="panel-head" id="ctlToggle" aria-expanded="true">
+        <span class="lab">Controls</span><span class="chev">▾</span>
+      </button>
+      <div class="panel-body" id="ctlBody">
+        <label class="row">
+          <span class="lab">Vertical exaggeration <b id="exagVal">×3</b></span>
+          <input type="range" id="exag" min="1" max="8" step="0.5" value="3" />
+        </label>
+        <label class="row">
+          <span class="lab">Surface ↔ cost view <b id="mixVal">0.60</b></span>
+          <input type="range" id="mix" min="0" max="1" step="0.01" value="0.6" />
+        </label>
+        <label class="row">
+          <span class="lab">Sun azimuth <b id="sunVal">250°</b></span>
+          <input type="range" id="sun" min="0" max="360" step="1" value="250" />
+        </label>
+        <div class="row checks">
+          <label><input type="checkbox" id="showRoute" checked /><span class="lab">Planned route</span></label>
+          <label><input type="checkbox" id="showDirect" checked /><span class="lab">Direct line</span></label>
+        </div>
+        <div class="hair"></div>
+        <label class="row">
+          <span class="lab">Rover speed <b id="speedVal">1.0×</b></span>
+          <input type="range" id="speed" min="0.25" max="6" step="0.25" value="1" />
+        </label>
+        <div class="row btns">
+          <button id="play" class="btn">Pause</button>
+          <button id="ride" class="btn">Ride along <kbd>C</kbd></button>
+        </div>
+        <div class="lab progress" id="progress">0.0 / 0.0 km</div>
+      </div>
+    </section>
+
+    <!-- always visible: honesty labels -->
+    <div class="hud bc lab" id="honesty">
+      Vertical exaggeration <b id="exagBadge">×3</b> <span class="sep">·</span> Rover not to scale
+    </div>
+
+    <!-- bottom-right: data note -->
+    <footer class="hud br" id="note"></footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
