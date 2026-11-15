@@ -111,9 +111,7 @@
 				gap: 9px;
 			}
 			.chip .lab {
-				font:
-					400 9px/1 "JetBrains Mono",
-					monospace;
+				font: 400 9px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.22em;
 				color: var(--faint);
 				text-transform: uppercase;
@@ -135,9 +133,7 @@
 				opacity: 0.9;
 			}
 			.mark span {
-				font:
-					400 10px/1 "JetBrains Mono",
-					monospace;
+				font: 400 10px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.3em;
 				color: var(--dim);
 			}
@@ -145,9 +141,7 @@
 				display: inline-flex;
 				align-items: center;
 				gap: 7px;
-				font:
-					400 9px/1 "JetBrains Mono",
-					monospace;
+				font: 400 9px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.2em;
 				color: var(--ok);
 				text-transform: uppercase;
@@ -219,9 +213,7 @@
 				color: transparent;
 			}
 			.headline .cap {
-				font:
-					400 10px/1 "JetBrains Mono",
-					monospace;
+				font: 400 10px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.26em;
 				color: var(--faint);
 				text-transform: uppercase;
@@ -248,9 +240,7 @@
 				border-right: 0;
 			}
 			.cell .k {
-				font:
-					400 9px/1 "JetBrains Mono",
-					monospace;
+				font: 400 9px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.2em;
 				color: var(--faint);
 				text-transform: uppercase;
@@ -308,28 +298,77 @@
 				justify-content: space-between;
 				padding: 14px 18px;
 				border-bottom: 1px solid var(--edge);
+				gap: 14px;
 			}
 			.ph h2 {
-				font:
-					400 10px/1 "JetBrains Mono",
-					monospace;
+				font: 400 10px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.24em;
 				color: var(--dim);
 				text-transform: uppercase;
+				white-space: nowrap;
 			}
 			.ph .meta {
 				font: 300 12px Barlow;
 				color: var(--faint);
-			}
-			#map {
-				height: 566px;
-				background: #0a0908;
+				display: flex;
+				align-items: center;
+				gap: 4px;
 			}
 			.leaflet-container {
 				background: #0a0908;
 			}
 			.pb {
 				padding: 20px;
+			}
+
+			/* ── map wrapper + 2D/3D toggle ── */
+			#mapWrap {
+				position: relative;
+				height: 566px;
+				overflow: hidden;
+			}
+			#map,
+			#map3d {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				border: 0;
+				background: #0a0908;
+			}
+			#map3d {
+				display: none;
+				background: #070605;
+			}
+			#mapWrap.is3d #map {
+				display: none;
+			}
+			#mapWrap.is3d #map3d {
+				display: block;
+			}
+			.vtog {
+				background: none;
+				border: 1px solid var(--edge);
+				color: var(--dim);
+				font: 400 9px/1 "JetBrains Mono", monospace;
+				letter-spacing: 0.18em;
+				padding: 6px 11px;
+				cursor: pointer;
+				border-radius: 2px;
+				transition: 0.15s;
+			}
+			.vtog:hover {
+				color: var(--ink);
+				border-color: rgba(255, 160, 90, 0.35);
+			}
+			.vtog.active {
+				color: var(--amber);
+				border-color: var(--amber);
+				background: rgba(255, 122, 47, 0.08);
+			}
+			.sep {
+				color: var(--faint);
+				margin: 0 6px;
 			}
 
 			/* ── station ── */
@@ -348,9 +387,7 @@
 				color: var(--amber);
 			}
 			.sid .m {
-				font:
-					400 10px/1.7 "JetBrains Mono",
-					monospace;
+				font: 400 10px/1.7 "JetBrains Mono", monospace;
 				color: var(--faint);
 				text-align: right;
 				letter-spacing: 0.08em;
@@ -380,9 +417,7 @@
 				right: 0;
 				padding: 7px 9px;
 				background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-				font:
-					400 8.5px/1 "JetBrains Mono",
-					monospace;
+				font: 400 8.5px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.17em;
 				color: var(--ink);
 				text-transform: uppercase;
@@ -404,9 +439,7 @@
 				margin: 0 auto;
 			}
 			.g .gl {
-				font:
-					400 8px/1 "JetBrains Mono",
-					monospace;
+				font: 400 8px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.11em;
 				color: var(--faint);
 				text-transform: uppercase;
@@ -434,9 +467,7 @@
 				flex: none;
 			}
 			.verdict .t {
-				font:
-					500 12px/1 "JetBrains Mono",
-					monospace;
+				font: 500 12px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.17em;
 			}
 			.verdict .r {
@@ -491,9 +522,7 @@
 				border-bottom: 0;
 			}
 			.crow .lb {
-				font:
-					400 9px/1 "JetBrains Mono",
-					monospace;
+				font: 400 9px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.17em;
 				color: var(--faint);
 				text-transform: uppercase;
@@ -531,9 +560,7 @@
 				border-bottom: 1px solid var(--edge);
 			}
 			.chead div {
-				font:
-					400 9px/1 "JetBrains Mono",
-					monospace;
+				font: 400 9px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.2em;
 				color: var(--faint);
 				text-transform: uppercase;
@@ -555,9 +582,7 @@
 				font-weight: 500;
 				display: block;
 				margin-bottom: 5px;
-				font:
-					500 9px/1 "JetBrains Mono",
-					monospace;
+				font: 500 9px/1 "JetBrains Mono", monospace;
 				letter-spacing: 0.2em;
 				text-transform: uppercase;
 			}
@@ -584,9 +609,7 @@
 				padding: 70px 20px;
 				text-align: center;
 				color: var(--faint);
-				font:
-					400 10px/1.9 "JetBrains Mono",
-					monospace;
+				font: 400 10px/1.9 "JetBrains Mono", monospace;
 				letter-spacing: 0.17em;
 				text-transform: uppercase;
 			}
@@ -658,9 +681,17 @@
 				<div class="panel">
 					<div class="ph">
 						<h2>Planned traverse</h2>
-						<div class="meta" id="mapMeta">—</div>
+						<div class="meta">
+							<span id="mapMeta">—</span>
+							<span class="sep">·</span>
+							<button class="vtog active" data-view="2d">2D</button>
+							<button class="vtog" data-view="3d">3D</button>
+						</div>
 					</div>
-					<div id="map"></div>
+					<div id="mapWrap">
+						<div id="map"></div>
+						<iframe id="map3d" title="3D traverse view" loading="lazy"></iframe>
+					</div>
 				</div>
 				<div class="panel">
 					<div class="ph">
@@ -778,16 +809,14 @@
 
 					const la = S.stations.map((s) => s.lat),
 						lo = S.stations.map((s) => s.lon);
+					const bounds = [
+						[Math.min(...la), Math.min(...lo)],
+						[Math.max(...la), Math.max(...lo)],
+					];
 					const map = L.map("map", {
 						attributionControl: false,
 						zoomControl: true,
-					}).fitBounds(
-						[
-							[Math.min(...la), Math.min(...lo)],
-							[Math.max(...la), Math.max(...lo)],
-						],
-						{ padding: [34, 34] },
-					);
+					}).fitBounds(bounds, { padding: [34, 34] });
 
 					L.polyline(
 						S.direct.coords.map((c) => [c[1], c[0]]),
@@ -834,6 +863,32 @@
 							.on("click", () => show(s));
 					});
 
+					/* ── map sizing fix: Leaflet measured the panel before layout settled ── */
+					const resize = () => {
+						map.invalidateSize();
+						map.fitBounds(bounds, { padding: [40, 40] });
+					};
+					setTimeout(resize, 120);
+					setTimeout(resize, 600);
+					window.addEventListener("resize", () => map.invalidateSize());
+
+					/* ── 2D / 3D toggle; the iframe loads only on first 3D click ── */
+					const mapWrap = document.getElementById("mapWrap");
+					const frame = document.getElementById("map3d");
+					document.querySelectorAll(".vtog").forEach((b) => {
+						b.addEventListener("click", () => {
+							document
+								.querySelectorAll(".vtog")
+								.forEach((x) => x.classList.remove("active"));
+							b.classList.add("active");
+							const is3d = b.dataset.view === "3d";
+							mapWrap.classList.toggle("is3d", is3d);
+							if (is3d && !frame.getAttribute("src"))
+								frame.setAttribute("src", "marswalk_3d.html");
+							if (!is3d) setTimeout(resize, 60);
+						});
+					});
+
 					function show(s) {
 						const k = vd(s.hazard);
 						panel.innerHTML = `
@@ -852,7 +907,10 @@
       <div class="verdict ${k}"><div class="dot"></div>
         <div><div class="t">${k}</div><div class="r">${rs(s.hazard)}</div></div></div>`;
 					}
-					show(S.stations[0]);
+					/* default to the highest-hazard station — the dune-field hero frame */
+					show(
+						S.stations.reduce((a, b) => (b.hazard > a.hazard ? b : a), S.stations[0]),
+					);
 
 					const row = (
 						lb,
@@ -896,7 +954,8 @@
 					document.getElementById("note").textContent = S.note;
 					document.getElementById("footL").innerHTML =
 						`NASA JPL AI4Mars · ${M.test_split}<br>MOLA/HRSC blended DEM · ${S.site.px_m} m/px<br>
-     DeepLabV3+ / ResNet-50 · <a href="https://huggingface.co/spaces/ahmedyar/marswalk" target="_blank">live model demo</a>`;
+     DeepLabV3+ / ResNet-50 · <a href="https://huggingface.co/spaces/ahmedyar/marswalk" target="_blank">live model demo</a> ·
+     <a href="marswalk_3d.html" target="_blank">3D terrain view</a>`;
 					document.getElementById("footR").innerHTML =
 						`NASA does not endorse any non-U.S. Government entity and is not<br>
      responsible for information contained on non-U.S. Government websites.`;
