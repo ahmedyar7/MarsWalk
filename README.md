@@ -49,6 +49,13 @@ Built for the NASA Space Apps Challenge 2026, challenge *Interplanetary Survival
 
 Crew safety is NASA's first priority on any surface mission. On Mars, the most dangerous property of the ground is whether it can bear weight, and that is very hard to see in an image. In 2009 the Spirit rover drove into soft soil and never moved again. A rover that becomes stuck loses its mission. A crew on foot or in a pressurised vehicle in the same situation would face a survival problem.
 
+<p align="center">
+  <img src="assets/image.png" alt="Spirit traverse map around Home Plate (left) and the same map passed through the Marswalk classifier (right)" width="100%">
+  <br>
+  <sub><b>Left:</b> Spirit's traverse around Home Plate, mapped to sol 2471. The inset zooms in on the rover's final position, where it stayed after becoming embedded in soft soil. Map: OSU Mapping and GIS Laboratory; image sources NASA/JPL/Cornell/University of Arizona.<br>
+  <b>Right:</b> the same map run through the Marswalk demo, for illustration only. The model was trained on ground-level rover frames, not orbital maps, so these labels are out-of-domain and not validated. Map text and annotations are classified along with the terrain.</sub>
+</p>
+
 Existing tools work at a different scale:
 
 | Tool | Scale | What it answers |
@@ -392,6 +399,8 @@ The Gradio cell starts the same interface as the [Hugging Face Space](https://hu
 | **MGS MOLA / Mars Express HRSC blended DEM**, 200 m/px | Elevation and slope over Gale Crater | Via [JPL Mars Trek](https://trek.nasa.gov/mars/) |
 | **NASA Mars Curiosity raw imagery** | Source imagery behind the AI4Mars Curiosity frames | [mars.nasa.gov/msl/multimedia/raw-images](https://mars.nasa.gov/msl/multimedia/raw-images/) |
 | **USGS-NASA Planetary Geologic Mapping Program** | Regional geologic context for site selection | [usgs.gov/.../planetary-geologic-mapping](https://www.usgs.gov/centers/astrogeology-science-center/science/planetary-geologic-mapping) |
+
+The Spirit traverse map in [The problem](#the-problem) is by the OSU Mapping and GIS Laboratory, with image sources NASA/JPL/Cornell/University of Arizona.
 
 Software: PyTorch, `segmentation-models-pytorch`, Hugging Face `datasets`, Gradio, rasterio, NumPy, Matplotlib, Leaflet.
 
