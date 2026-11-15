@@ -13,6 +13,7 @@ Built for the NASA Space Apps Challenge 2026, challenge _Interplanetary Survival
 [![License](https://img.shields.io/badge/license-unspecified-lightgrey)](#license)
 [![Live map](https://img.shields.io/badge/live-traverse%20map-orange)](https://ahmedyar7.github.io/MarsWalk/)
 [![Live demo](https://img.shields.io/badge/%F0%9F%A4%97%20demo-Hugging%20Face-yellow)](https://huggingface.co/spaces/ahmedyar/marswalk)
+[![3D viewer](https://img.shields.io/badge/live-3D%20terrain%20viewer-orange)](https://ahmedyar7.github.io/MarsWalk/viewer-app/)
 
 <table>
   <tr>
@@ -40,6 +41,7 @@ Built for the NASA Space Apps Challenge 2026, challenge _Interplanetary Survival
 - [Repository structure](#repository-structure)
 - [Running it yourself](#running-it-yourself)
 - [Limitations](#limitations)
+- [3D terrain viewer](#3d-terrain-viewer)
 - [Data and attribution](#data-and-attribution)
 - [License](#license)
 
@@ -305,6 +307,8 @@ MarsWalk-Site/
 │   │       └── fig1.png … fig6.png   # rover image | expert labels | prediction panels
 │   └── frames/
 │       └── wp0_raw.png … wp7_seg.png # 8 frames spanning the hazard range, raw + classified
+├── viewer/                     # Three.js 3D terrain viewer source (Vite); public/ holds the heightmap, cost map, terrain.json and station frames
+├── viewer-app/                 # Built 3D terrain viewer, served by GitHub Pages
 ├── index.html                  # Live traverse map (Leaflet 1.9.4), reads site.json
 ├── site.json                   # Route, direct line, 12 stations, model metrics, cost params
 └── Marswalk.ipynb              # Training, evaluation, export, DEM processing, planning (Colab)
@@ -388,6 +392,12 @@ The Gradio cell starts the same interface as the [Hugging Face Space](https://hu
 8. **The training budget is small.** The model was trained on 3,600 labelled frames at 256 × 256 for 6 epochs. Small rocks and fine sand ripples lose detail at that resolution, and a longer schedule or larger subset was not explored.
 9. **The cost weights are hand-set.** The slope weight of 4, hazard weight of 6 and 15° limit were chosen by judgement, not calibrated against traversability or crew-mobility data. Different weights give a different route and a different distance–hazard trade-off.
 10. **There is one route and one baseline, with no uncertainty.** Results cover a single habitat–target pair. The comparison is a straight line, not another planner, and the route does not carry model or interpolation uncertainty. The 17% / 40% figures describe this one case, not a general guarantee.
+
+---
+
+## 3D terrain viewer
+
+The [interactive 3D terrain viewer](https://ahmedyar7.github.io/MarsWalk/viewer-app/) renders Gale Crater from the MOLA/HRSC heightmap, with the traversal cost surface shaded onto the terrain. The direct line and the planned route are both drawn in 3D, and a rover is animated along the planned route. Each of the 12 imaging stations is clickable and shows the raw frame next to the model's classification. Vertical exaggeration is adjustable and always displayed on screen, because the real relief is subtle at 200 m/px. The viewer is built with Three.js; its source is in `viewer/` and the build output is in `viewer-app/`.
 
 ---
 
