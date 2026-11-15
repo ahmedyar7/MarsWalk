@@ -6,7 +6,7 @@
 
 A terrain-safety traverse planner that labels every pixel of Mars rover imagery as soil, bedrock, sand or big rock, then plans a crew route that avoids the ground that ended Spirit's mission.
 
-Built for the NASA Space Apps Challenge 2026, challenge *Interplanetary Survival Guide: Martian Map*.
+Built for the NASA Space Apps Challenge 2026, challenge _Interplanetary Survival Guide: Martian Map_.
 
 [![Python](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-DeepLabV3%2B-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
@@ -58,11 +58,11 @@ Crew safety is NASA's first priority on any surface mission. On Mars, the most d
 
 Existing tools work at a different scale:
 
-| Tool | Scale | What it answers |
-|---|---|---|
-| Mars Trek | Regional to global | Where things are, what the topography looks like |
-| USGS-NASA geologic maps | Regional to global | What geologic units underlie an area |
-| **Marswalk** | **One excursion (tens of km)** | **Which ground along this walk is likely to be unsafe, and which way to go around it** |
+| Tool                    | Scale                          | What it answers                                                                        |
+| ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------- |
+| Mars Trek               | Regional to global             | Where things are, what the topography looks like                                       |
+| USGS-NASA geologic maps | Regional to global             | What geologic units underlie an area                                                   |
+| **Marswalk**            | **One excursion (tens of km)** | **Which ground along this walk is likely to be unsafe, and which way to go around it** |
 
 Marswalk fills the gap at the scale of a single excursion. It combines what the rover cameras see at ground level with what orbital elevation data say about slope, and plans a route through both.
 
@@ -73,15 +73,15 @@ Marswalk fills the gap at the scale of a single excursion. It combines what the 
 Marswalk has two parts:
 
 1. **Terrain classifier.** A DeepLabV3+ network with a ResNet-50 encoder, trained on NASA JPL's AI4Mars dataset, labels each pixel of a rover frame as one of four classes: soil, bedrock, sand or big rock. Sand and big rock count as hazardous.
-2. **Traverse planner.** Per-frame hazard scores are interpolated across a Gale Crater elevation model, combined with slope into a cost surface, and solved with A* to give a route from the habitat to a science target.
+2. **Traverse planner.** Per-frame hazard scores are interpolated across a Gale Crater elevation model, combined with slope into a cost surface, and solved with A\* to give a route from the habitat to a science target.
 
 It uses three data layers:
 
-| # | Layer | Source | Resolution / extent |
-|---|---|---|---|
-| 1 | Optical | Curiosity rover imagery (AI4Mars test frames) | 12 imaging stations |
-| 2 | Terrain classification (derived) | DeepLabV3+ / ResNet-50 trained on AI4Mars | Per-pixel, 4 classes |
-| 3 | Topographic | MOLA/HRSC blended DEM, cropped to Gale Crater, plus a derived slope raster | 200 m/px, 207 × 207 grid |
+| #   | Layer                            | Source                                                                     | Resolution / extent      |
+| --- | -------------------------------- | -------------------------------------------------------------------------- | ------------------------ |
+| 1   | Optical                          | Curiosity rover imagery (AI4Mars test frames)                              | 12 imaging stations      |
+| 2   | Terrain classification (derived) | DeepLabV3+ / ResNet-50 trained on AI4Mars                                  | Per-pixel, 4 classes     |
+| 3   | Topographic                      | MOLA/HRSC blended DEM, cropped to Gale Crater, plus a derived slope raster | 200 m/px, 207 × 207 grid |
 
 ### Pipeline
 
@@ -114,22 +114,22 @@ flowchart TD
 
 Evaluated on AI4Mars `test_min3`: Curiosity frames whose labels were agreed by at least three experts. This split was held out of training and checkpoint selection.
 
-| Model | mIoU | soil | bedrock | sand | big rock | pixel acc |
-|---|---|---|---|---|---|---|
-| All-soil baseline | 0.128 | 0.514 | 0.000 | 0.000 | 0.000 | 0.514 |
+| Model                 | mIoU      | soil      | bedrock   | sand      | big rock  | pixel acc |
+| --------------------- | --------- | --------- | --------- | --------- | --------- | --------- |
+| All-soil baseline     | 0.128     | 0.514     | 0.000     | 0.000     | 0.000     | 0.514     |
 | **DeepLabV3+ (min3)** | **0.715** | **0.949** | **0.910** | **0.913** | **0.089** | **0.961** |
-| DeepLabV3+ (min1) | 0.625 | 0.874 | 0.759 | 0.816 | 0.049 | 0.895 |
+| DeepLabV3+ (min1)     | 0.625     | 0.874     | 0.759     | 0.816     | 0.049     | 0.895     |
 
 The baseline predicts soil everywhere. Its 0.514 pixel accuracy shows that soil makes up about half of the labelled test pixels, so pixel accuracy on its own says little about performance. The `min1` row uses the looser test split, where a single expert's label is enough, so it contains more label noise.
 
 Per-class recall and precision on `test_min3`:
 
-| Class | Recall (%) | Precision (%) | IoU |
-|---|---|---|---|
-| soil | 96.0 | 98.8 | 0.949 |
-| bedrock | 94.9 | 95.8 | 0.910 |
-| sand | 97.4 | 93.5 | 0.913 |
-| big rock | 89.7 | 9.0 | 0.089 |
+| Class    | Recall (%) | Precision (%) | IoU   |
+| -------- | ---------- | ------------- | ----- |
+| soil     | 96.0       | 98.8          | 0.949 |
+| bedrock  | 94.9       | 95.8          | 0.910 |
+| sand     | 97.4       | 93.5          | 0.913 |
+| big rock | 89.7       | 9.0           | 0.089 |
 
 Sand matters most for safety, and it is the class with the highest recall: the model finds 97.4% of expert-labelled sand pixels.
 
@@ -137,13 +137,13 @@ Sand matters most for safety, and it is the class with the highest recall: the m
 
 Gale Crater, lower Mount Sharp. The objective is to characterise boxwork formations. The route runs from the habitat to the science target. All values below are read directly from [`site.json`](site.json).
 
-| Metric | Direct (straight line) | Marswalk | Change |
-|---|---|---|---|
-| Distance | 40.8 km | 47.6 km | +6.8 km (+17%) |
-| Mean hazard exposure | 0.302 | 0.180 | −40% |
-| Mean slope | 1.4° | 2.3° | +0.9° |
-| Max slope | 4.5° | 5.9° | +1.4° |
-| Cells above 15° slope limit | 0.0% | 0.0% | — |
+| Metric                      | Direct (straight line) | Marswalk | Change         |
+| --------------------------- | ---------------------- | -------- | -------------- |
+| Distance                    | 40.8 km                | 47.6 km  | +6.8 km (+17%) |
+| Mean hazard exposure        | 0.302                  | 0.180    | −40%           |
+| Mean slope                  | 1.4°                   | 2.3°     | +0.9°          |
+| Max slope                   | 4.5°                   | 5.9°     | +1.4°          |
+| Cells above 15° slope limit | 0.0%                   | 0.0%     | —              |
 
 **17% extra distance buys 40% less hazard exposure.** The route takes on a little more slope (max 5.9°), but stays well under the 15° limit at every cell.
 
@@ -152,19 +152,19 @@ Gale Crater, lower Mount Sharp. The objective is to characterise boxwork formati
 The 12 stations, ordered by measured hazard (values from `site.json`, coverage rounded to one decimal):
 
 | Station | Hazard | Soil % | Bedrock % | Sand % | Big rock % | Slope (°) | Elevation (m) |
-|---|---|---|---|---|---|---|---|
-| ST-0 | 0.005 | 99.5 | 0.0 | 0.0 | 0.5 | 10.6 | −3826 |
-| ST-1 | 0.015 | 0.7 | 97.8 | 1.6 | 0.0 | 4.1 | −4247 |
-| ST-2 | 0.063 | 70.2 | 23.5 | 6.3 | 0.0 | 0.4 | −4526 |
-| ST-3 | 0.069 | 0.1 | 93.0 | 5.4 | 1.5 | 4.1 | −4512 |
-| ST-4 | 0.100 | 54.7 | 35.4 | 10.0 | 0.0 | 14.2 | −3605 |
-| ST-5 | 0.122 | 87.8 | 0.0 | 12.2 | 0.0 | 1.5 | −4366 |
-| ST-6 | 0.161 | 0.0 | 83.9 | 7.7 | 8.4 | 1.7 | −4496 |
-| ST-7 | 0.186 | 81.4 | 0.0 | 15.3 | 3.4 | 2.8 | −4531 |
-| ST-8 | 0.259 | 5.6 | 68.6 | 25.9 | 0.0 | 0.9 | −4257 |
-| ST-9 | 0.356 | 15.0 | 49.4 | 35.2 | 0.4 | 1.3 | −4137 |
-| ST-10 | 0.634 | 0.4 | 36.2 | 56.2 | 7.2 | 1.2 | −4462 |
-| ST-11 | 0.879 | 6.2 | 5.9 | 87.9 | 0.0 | 1.6 | −4264 |
+| ------- | ------ | ------ | --------- | ------ | ---------- | --------- | ------------- |
+| ST-0    | 0.005  | 99.5   | 0.0       | 0.0    | 0.5        | 10.6      | −3826         |
+| ST-1    | 0.015  | 0.7    | 97.8      | 1.6    | 0.0        | 4.1       | −4247         |
+| ST-2    | 0.063  | 70.2   | 23.5      | 6.3    | 0.0        | 0.4       | −4526         |
+| ST-3    | 0.069  | 0.1    | 93.0      | 5.4    | 1.5        | 4.1       | −4512         |
+| ST-4    | 0.100  | 54.7   | 35.4      | 10.0   | 0.0        | 14.2      | −3605         |
+| ST-5    | 0.122  | 87.8   | 0.0       | 12.2   | 0.0        | 1.5       | −4366         |
+| ST-6    | 0.161  | 0.0    | 83.9      | 7.7    | 8.4        | 1.7       | −4496         |
+| ST-7    | 0.186  | 81.4   | 0.0       | 15.3   | 3.4        | 2.8       | −4531         |
+| ST-8    | 0.259  | 5.6    | 68.6      | 25.9   | 0.0        | 0.9       | −4257         |
+| ST-9    | 0.356  | 15.0   | 49.4      | 35.2   | 0.4        | 1.3       | −4137         |
+| ST-10   | 0.634  | 0.4    | 36.2      | 56.2   | 7.2        | 1.2       | −4462         |
+| ST-11   | 0.879  | 6.2    | 5.9       | 87.9   | 0.0        | 1.6       | −4264         |
 
 ---
 
@@ -178,7 +178,7 @@ Big rock is the weakest class by IoU: **0.089**. It needs a proper explanation, 
 
 **Where the false positives come from.** **81%** of the big-rock false positives are pixels the experts labelled **bedrock**. That confusion is understandable: a big rock and an exposed bedrock slab are both hard, angular and lit the same way, and at 256 × 256 input resolution the difference often comes down to whether the edge of the outcrop is visible. The model is not mistaking sand or soil for boulders. It is mistaking one kind of hard ground for another.
 
-**Why the error is acceptable for this use.** In the planner, big rock counts as hazard and bedrock does not. When bedrock is called big rock, the hazard estimate goes up, the cost surface becomes more expensive, and A* routes around ground that was safe. The route gets longer but no less safe. The opposite error, calling big rock bedrock, would lower the hazard estimate and send a crew into an obstacle field. The model makes that error on only about 10% of real big-rock pixels.
+**Why the error is acceptable for this use.** In the planner, big rock counts as hazard and bedrock does not. When bedrock is called big rock, the hazard estimate goes up, the cost surface becomes more expensive, and A\* routes around ground that was safe. The route gets longer but no less safe. The opposite error, calling big rock bedrock, would lower the hazard estimate and send a crew into an obstacle field. The model makes that error on only about 10% of real big-rock pixels.
 
 In short, **the model over-calls obstacles, so it fails in the safe direction.** The cost of this behaviour is extra distance, not extra exposure.
 
@@ -234,21 +234,21 @@ The AI4Mars rows used here come from the [`hassanjbara/AI4MARS`](https://hugging
 
 ### Training
 
-| Setting | Value |
-|---|---|
-| Architecture | DeepLabV3+ (`segmentation-models-pytorch`) |
-| Encoder | ResNet-50, ImageNet weights |
-| Classes | 4 (soil, bedrock, sand, big rock) |
-| Loss | Weighted cross-entropy, weight = 1 − class share of training pixels, `ignore_index=255` |
-| Optimiser | AdamW, lr 3e-4, weight decay 1e-4 |
-| Batch size | 8 |
-| Precision | Mixed (`torch.amp` autocast + GradScaler) |
-| Epochs | 6 |
-| Training images | 3,600 at 256 × 256 |
-| Augmentation | Horizontal flip (p = 0.5) applied identically to image and mask; brightness jitter ×U(0.8, 1.25) on the image only |
-| Normalisation | ImageNet mean/std |
-| Checkpoint selection | Best validation mIoU: epoch 4, val mIoU 0.767 |
-| Compute | ~1 hour on a single free-tier GPU |
+| Setting              | Value                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Architecture         | DeepLabV3+ (`segmentation-models-pytorch`)                                                                         |
+| Encoder              | ResNet-50, ImageNet weights                                                                                        |
+| Classes              | 4 (soil, bedrock, sand, big rock)                                                                                  |
+| Loss                 | Weighted cross-entropy, weight = 1 − class share of training pixels, `ignore_index=255`                            |
+| Optimiser            | AdamW, lr 3e-4, weight decay 1e-4                                                                                  |
+| Batch size           | 8                                                                                                                  |
+| Precision            | Mixed (`torch.amp` autocast + GradScaler)                                                                          |
+| Epochs               | 6                                                                                                                  |
+| Training images      | 3,600 at 256 × 256                                                                                                 |
+| Augmentation         | Horizontal flip (p = 0.5) applied identically to image and mask; brightness jitter ×U(0.8, 1.25) on the image only |
+| Normalisation        | ImageNet mean/std                                                                                                  |
+| Checkpoint selection | Best validation mIoU: epoch 4, val mIoU 0.767                                                                      |
+| Compute              | ~1 hour on a single free-tier GPU                                                                                  |
 
 The class weights reduce the influence of soil, which dominates the pixel count, and give more weight to the rarer sand and big-rock classes.
 
@@ -263,12 +263,12 @@ cost = 1 + 4 · (min(θ, 15°) / 15°)² + 6 · hazard
 cost = ∞                              where θ > 15°
 ```
 
-| Term | Meaning |
-|---|---|
-| `1` | Base cost per unit distance, so flat, safe ground still has a length penalty |
-| `4 · (θ/15°)²` | Quadratic slope penalty, reaching 4 at the limit |
-| `6 · hazard` | Terrain penalty, weighted more heavily than slope |
-| `∞` above 15° | Hard limit; **11.4%** of cells are impassable |
+| Term           | Meaning                                                                      |
+| -------------- | ---------------------------------------------------------------------------- |
+| `1`            | Base cost per unit distance, so flat, safe ground still has a length penalty |
+| `4 · (θ/15°)²` | Quadratic slope penalty, reaching 4 at the limit                             |
+| `6 · hazard`   | Terrain penalty, weighted more heavily than slope                            |
+| `∞` above 15°  | Hard limit; **11.4%** of cells are impassable                                |
 
 **Hazard field.** Each of the 12 stations has a hazard score equal to the share of its frame's pixels that the model classifies as sand or big rock. These point values are spread across the grid with a normalised Gaussian kernel, `σ = max(H, W) / 14 ≈ 15 cells ≈ 3 km`. Each cell's hazard is the kernel-weighted mean of the station values.
 
@@ -343,13 +343,13 @@ Mars_MOLA_blend200ppx_HRSC_DEM_clon0dd_200mpp_lzw.tif
 
 Set `CKPT_DIR` (default `/content/drive/MyDrive/ai4mars`), then run the notebook in order:
 
-| Step | What runs |
-|---|---|
-| Data prep | `prepare()`, labelled-row selection, 256 × 256 caching, 90/10 split |
-| Class weights | `1 − class share` over the training pixels |
-| Baseline | All-soil confusion matrix on `test_min3` |
-| Training | 6 epochs, best checkpoint saved to `CKPT_DIR/best.pt` |
-| Evaluation | mIoU, per-class IoU, pixel accuracy and confusion matrix on `test_min3` and `test_min1` |
+| Step          | What runs                                                                               |
+| ------------- | --------------------------------------------------------------------------------------- |
+| Data prep     | `prepare()`, labelled-row selection, 256 × 256 caching, 90/10 split                     |
+| Class weights | `1 − class share` over the training pixels                                              |
+| Baseline      | All-soil confusion matrix on `test_min3`                                                |
+| Training      | 6 epochs, best checkpoint saved to `CKPT_DIR/best.pt`                                   |
+| Evaluation    | mIoU, per-class IoU, pixel accuracy and confusion matrix on `test_min3` and `test_min1` |
 
 The sand error-analysis cell uses a `worst` list that is built in a cell not included in this notebook. Skip that cell, or rebuild `worst` as a list of `(row, score)` pairs for the test frames, before running it.
 
@@ -372,7 +372,7 @@ Pushing to `main` deploys the page to GitHub Pages through [`.github/workflows/s
 
 ### 6. Model demo
 
-The Gradio cell starts the same interface as the [Hugging Face Space](https://huggingface.co/spaces/ahmedyar/marswalk). It returns a classified overlay, class coverage, and a verdict: *traversable* when hazard is 10% or less, *caution* between 10% and 30%, and *high hazard* above 30%.
+The Gradio cell starts the same interface as the [Hugging Face Space](https://huggingface.co/spaces/ahmedyar/marswalk). It returns a classified overlay, class coverage, and a verdict: _traversable_ when hazard is 10% or less, _caution_ between 10% and 30%, and _high hazard_ above 30%.
 
 ---
 
@@ -393,12 +393,12 @@ The Gradio cell starts the same interface as the [Hugging Face Space](https://hu
 
 ## Data and attribution
 
-| Source | Use in Marswalk | Link |
-|---|---|---|
-| **AI4Mars** (NASA JPL): ~35k rover images, 326k crowdsourced labels, ~1.5k expert labels | Training and evaluation of the terrain classifier; station frames | Swan et al., *AI4Mars: A Dataset for Terrain-Aware Autonomous Driving on Mars*, CVPR Workshops 2021. Mirror used: [huggingface.co/datasets/hassanjbara/AI4MARS](https://huggingface.co/datasets/hassanjbara/AI4MARS) |
-| **MGS MOLA / Mars Express HRSC blended DEM**, 200 m/px | Elevation and slope over Gale Crater | Via [JPL Mars Trek](https://trek.nasa.gov/mars/) |
-| **NASA Mars Curiosity raw imagery** | Source imagery behind the AI4Mars Curiosity frames | [mars.nasa.gov/msl/multimedia/raw-images](https://mars.nasa.gov/msl/multimedia/raw-images/) |
-| **USGS-NASA Planetary Geologic Mapping Program** | Regional geologic context for site selection | [usgs.gov/.../planetary-geologic-mapping](https://www.usgs.gov/centers/astrogeology-science-center/science/planetary-geologic-mapping) |
+| Source                                                                                   | Use in Marswalk                                                   | Link                                                                                                                                                                                                                 |
+| ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **AI4Mars** (NASA JPL): ~35k rover images, 326k crowdsourced labels, ~1.5k expert labels | Training and evaluation of the terrain classifier; station frames | Swan et al., _AI4Mars: A Dataset for Terrain-Aware Autonomous Driving on Mars_, CVPR Workshops 2021. Mirror used: [huggingface.co/datasets/hassanjbara/AI4MARS](https://huggingface.co/datasets/hassanjbara/AI4MARS) |
+| **MGS MOLA / Mars Express HRSC blended DEM**, 200 m/px                                   | Elevation and slope over Gale Crater                              | Via [JPL Mars Trek](https://trek.nasa.gov/mars/)                                                                                                                                                                     |
+| **NASA Mars Curiosity raw imagery**                                                      | Source imagery behind the AI4Mars Curiosity frames                | [mars.nasa.gov/msl/multimedia/raw-images](https://mars.nasa.gov/msl/multimedia/raw-images/)                                                                                                                          |
+| **USGS-NASA Planetary Geologic Mapping Program**                                         | Regional geologic context for site selection                      | [usgs.gov/.../planetary-geologic-mapping](https://www.usgs.gov/centers/astrogeology-science-center/science/planetary-geologic-mapping)                                                                               |
 
 The Spirit traverse map in [The problem](#the-problem) is by the OSU Mapping and GIS Laboratory, with image sources NASA/JPL/Cornell/University of Arizona.
 
