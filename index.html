@@ -686,6 +686,7 @@
 							<span class="sep">·</span>
 							<button class="vtog active" data-view="2d">2D</button>
 							<button class="vtog" data-view="3d">3D</button>
+							<button class="vtog" id="vtog-terrain">TERRAIN ↗</button>
 						</div>
 					</div>
 					<div id="mapWrap">
@@ -872,6 +873,13 @@
 					setTimeout(resize, 600);
 					window.addEventListener("resize", () => map.invalidateSize());
 
+					/* ── terrain viewer link: opens a new tab. Registered before the toggle
+					   below and stops propagation, so the toggle handler never runs for it ── */
+					document.getElementById("vtog-terrain").addEventListener("click", (e) => {
+						e.stopImmediatePropagation();
+						window.open("viewer-app/", "_blank");
+					});
+
 					/* ── 2D / 3D toggle; the iframe loads only on first 3D click ── */
 					const mapWrap = document.getElementById("mapWrap");
 					const frame = document.getElementById("map3d");
@@ -955,7 +963,7 @@
 					document.getElementById("footL").innerHTML =
 						`NASA JPL AI4Mars · ${M.test_split}<br>MOLA/HRSC blended DEM · ${S.site.px_m} m/px<br>
      DeepLabV3+ / ResNet-50 · <a href="https://huggingface.co/spaces/ahmedyar/marswalk" target="_blank">live model demo</a> ·
-     <a href="marswalk_3d.html" target="_blank">3D terrain view</a>`;
+     <a href="marswalk_3d.html" target="_blank">3D terrain view</a> · <a href="viewer-app/" target="_blank">interactive terrain viewer</a>`;
 					document.getElementById("footR").innerHTML =
 						`NASA does not endorse any non-U.S. Government entity and is not<br>
      responsible for information contained on non-U.S. Government websites.`;
