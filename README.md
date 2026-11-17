@@ -30,8 +30,34 @@ Built for the NASA Space Apps Challenge 2026, challenge _Interplanetary Survival
 
 ---
 
+## See it in motion
+
+<p align="center">
+  <a href="https://ahmedyar7.github.io/MarsWalk/viewer-app/"><img src="media/threejs-rover-view.gif" alt="Three.js terrain viewer: Gale Crater shaded by traversal cost, with the planned route, the direct line and the 12 imaging stations" width="100%"></a>
+  <br>
+  <sub><b>3D terrain viewer.</b> Gale Crater from the MOLA/HRSC elevation model, shaded by traversal cost, with the planned route (orange), the direct line (dashed) and the 12 imaging stations coloured by hazard. A rover drives the planned route. <a href="https://ahmedyar7.github.io/MarsWalk/viewer-app/">Open the live viewer →</a></sub>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://ahmedyar7.github.io/MarsWalk/"><img src="media/plotly-3d-view.gif" alt="Traverse map switching from the 2D map to the Plotly 3D surface" width="100%"></a>
+      <br>
+      <sub><b>Traverse map.</b> The 2D route map and station analysis, switching to the Plotly 3D surface (vertical exaggeration ×4). <a href="https://ahmedyar7.github.io/MarsWalk/">Open the map →</a></sub>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://huggingface.co/spaces/ahmedyar/marswalk"><img src="media/huggingface-demo.gif" alt="Hugging Face demo classifying a rover frame into soil, bedrock, sand and big rock" width="100%"></a>
+      <br>
+      <sub><b>Model demo.</b> Upload a rover frame and get a per-pixel terrain classification, class coverage and a traverse verdict. <a href="https://huggingface.co/spaces/ahmedyar/marswalk">Try it on Hugging Face →</a></sub>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## Contents
 
+- [See it in motion](#see-it-in-motion)
 - [The problem](#the-problem)
 - [What it does](#what-it-does)
 - [Results](#results)
@@ -48,6 +74,12 @@ Built for the NASA Space Apps Challenge 2026, challenge _Interplanetary Survival
 ---
 
 ## The problem
+
+<p align="center">
+  <img src="media/spirit-illustration.gif" alt="AI-generated illustration of a six-wheeled rover driving across Martian terrain" width="70%">
+  <br>
+  <sub>AI-generated illustration of a six-wheeled rover on Mars. Not mission imagery.</sub>
+</p>
 
 Crew safety is NASA's first priority on any surface mission. On Mars, the most dangerous property of the ground is whether it can bear weight, and that is very hard to see in an image. In 2009 the Spirit rover drove into soft soil and never moved again. A rover that becomes stuck loses its mission. A crew on foot or in a pressurised vehicle in the same situation would face a survival problem.
 
@@ -307,6 +339,7 @@ MarsWalk-Site/
 │   │       └── fig1.png … fig6.png   # rover image | expert labels | prediction panels
 │   └── frames/
 │       └── wp0_raw.png … wp7_seg.png # 8 frames spanning the hazard range, raw + classified
+├── media/                      # Animated previews used in this README
 ├── viewer/                     # Three.js 3D terrain viewer source (Vite); public/ holds the heightmap, cost map, terrain.json and station frames
 ├── viewer-app/                 # Built 3D terrain viewer, served by GitHub Pages
 ├── index.html                  # Live traverse map (Leaflet 1.9.4), reads site.json
