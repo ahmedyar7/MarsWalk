@@ -66,7 +66,6 @@ Built for the NASA Space Apps Challenge 2026, challenge _Interplanetary Survival
 - [How it works](#how-it-works)
 - [Repository structure](#repository-structure)
 - [Running it yourself](#running-it-yourself)
-- [Limitations](#limitations)
 - [3D terrain viewer](#3d-terrain-viewer)
 - [Data and attribution](#data-and-attribution)
 - [License](#license)
@@ -250,7 +249,7 @@ In short, **the model over-calls obstacles, so it fails in the safe direction.**
 <p align="center">
   <img src="assets/figs/figs/fig3.png" alt="Frame with rover deck in view: rover image, expert labels, Marswalk prediction" width="100%">
   <br>
-  <sub><b>Why the ignore masks matter.</b> The soil plain is classified correctly, but the model paints the rover deck as big rock and bedrock and the distant ridge and sky as sand. None of those regions carry a ground-truth label. The rover mask and range mask set them to 255, so they are excluded from every metric. The same regions do still count toward a frame's raw hazard share (see Limitations).</sub>
+  <sub><b>Why the ignore masks matter.</b> The soil plain is classified correctly, but the model paints the rover deck as big rock and bedrock and the distant ridge and sky as sand. None of those regions carry a ground-truth label. The rover mask and range mask set them to 255, so they are excluded from every metric. The same regions do still count toward a frame's raw hazard share.</sub>
 </p>
 
 ---
@@ -410,21 +409,6 @@ Pushing to `main` deploys the page to GitHub Pages through [`.github/workflows/s
 ### 6. Model demo
 
 The Gradio cell starts the same interface as the [Hugging Face Space](https://huggingface.co/spaces/ahmedyar/marswalk). It returns a classified overlay, class coverage, and a verdict: _traversable_ when hazard is 10% or less, _caution_ between 10% and 30%, and _high hazard_ above 30%.
-
----
-
-## Limitations
-
-1. **Station placement is illustrative: AI4Mars frames carry no rover coordinates; elevation, slope and the route are real geospatial data, and the terrain classification and all reported metrics are real.** Each of the 12 stations is placed at a random position (fixed seed) in the Gale Crater grid and assigned a real Curiosity test frame. The frame's measured composition then stands in for the ground at that position.
-2. **The hazard field is interpolated from 12 point samples.** Between stations, hazard is a Gaussian-weighted average with σ ≈ 3 km, not an observation. A sand patch that falls between stations is not represented.
-3. **The scales do not match.** A rover frame shows only the ground near the camera, but a DEM cell is 200 m across. One frame is used as the hazard value for the area around a station, far larger than what the frame actually shows.
-4. **Slope is computed at 200 m/px.** Averaging smooths out local relief, so slopes a crew would meet on foot can be much steeper than the 5.9° route maximum. The 15° limit applies to 200 m averages, not to the real gradient underfoot.
-5. **Visual class is a proxy for bearing strength.** The model classifies what the ground looks like. Soft ground under a crust, the kind of trap that stopped Spirit, can look like ordinary soil. "Sand" is a visual stand-in for low bearing strength, not a measurement of it.
-6. **Big-rock precision is 9.0%.** As explained [above](#the-big-rock-number), the error leans toward caution, but it inflates hazard on bedrock and so lengthens routes over safe ground.
-7. **Station hazard counts all predicted pixels, including masked regions.** When station hazard is computed, the rover and range masks are not applied, so predictions on rover hardware, distant terrain or sky (see the second gallery figure) can add to a frame's sand and big-rock share.
-8. **The training budget is small.** The model was trained on 3,600 labelled frames at 256 × 256 for 6 epochs. Small rocks and fine sand ripples lose detail at that resolution, and a longer schedule or larger subset was not explored.
-9. **The cost weights are hand-set.** The slope weight of 4, hazard weight of 6 and 15° limit were chosen by judgement, not calibrated against traversability or crew-mobility data. Different weights give a different route and a different distance–hazard trade-off.
-10. **There is one route and one baseline, with no uncertainty.** Results cover a single habitat–target pair. The comparison is a straight line, not another planner, and the route does not carry model or interpolation uncertainty. The 17% / 40% figures describe this one case, not a general guarantee.
 
 ---
 
